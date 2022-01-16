@@ -1,5 +1,8 @@
+mod cli;
 mod testspec;
 
-fn main() {
-    println!("Hello, world!");
+use anyhow::Result;
+
+fn main() -> Result<()> {
+    cli::execute()
 }
