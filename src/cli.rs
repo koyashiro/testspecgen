@@ -6,7 +6,6 @@ use anyhow::{bail, Error, Result};
 use structopt::StructOpt;
 
 use super::generator;
-use super::testspec::parse;
 
 #[derive(Debug)]
 enum OutputFormat {
@@ -50,7 +49,7 @@ pub fn execute() -> Result<()> {
         }
     };
 
-    let testspec = parse(&s)?;
+    let testspec = s.parse()?;
     println!("testspec = {:#?}", testspec);
 
     enum Output {

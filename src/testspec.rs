@@ -1,5 +1,6 @@
+use std::str::FromStr;
+
 use serde::{Deserialize, Serialize};
-use serde_yaml::from_str;
 
 #[derive(Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct TestSpec {
@@ -8,12 +9,26 @@ pub struct TestSpec {
     pub categories: Vec<TestCategory>,
 }
 
+impl FromStr for TestSpec {
+    type Err = serde_yaml::Error;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        serde_yaml::from_str(s)
+    }
+}
+
 #[derive(Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct TestCategory {
     pub title: String,
 
     #[serde(default)]
     pub cases: Vec<TestCase>,
+}
+
+impl FromStr for TestCategory {
+    type Err = serde_yaml::Error;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        serde_yaml::from_str(s)
+    }
 }
 
 pub type Operation = String;
@@ -36,8 +51,11 @@ pub struct TestCase {
     pub remarks: Vec<Remark>,
 }
 
-pub fn parse(s: &str) -> serde_yaml::Result<TestSpec> {
-    from_str(s)
+impl FromStr for TestCase {
+    type Err = serde_yaml::Error;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        serde_yaml::from_str(s)
+    }
 }
 
 #[cfg(test)]
