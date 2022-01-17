@@ -5,6 +5,8 @@ use std::str::FromStr;
 use anyhow::{bail, Error, Result};
 use structopt::StructOpt;
 
+use crate::testspec::{Markdown, TestSpec};
+
 use super::generator;
 
 #[derive(Debug)]
@@ -50,8 +52,7 @@ pub fn execute() -> Result<()> {
         _ => read_to_string(&opt.file)?,
     };
 
-    let testspec = s.parse()?;
-    println!("testspec = {:#?}", testspec);
+    let testspec: TestSpec = s.parse()?;
 
     enum Output {
         Text(String),
@@ -60,7 +61,7 @@ pub fn execute() -> Result<()> {
 
     let output: Output = match opt.format {
         Format::Markdown => {
-            let markdown = generator::generate_markdown(&testspec);
+            let markdown: Markdown = testspec.try_into()?;
             Output::Text(markdown)
         }
         Format::Excel => {

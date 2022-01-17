@@ -1,3 +1,4 @@
+use std::fmt::Write;
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
@@ -55,6 +56,66 @@ impl FromStr for TestCase {
     type Err = serde_yaml::Error;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         serde_yaml::from_str(s)
+    }
+}
+
+pub type Markdown = String;
+
+impl TryInto<Markdown> for TestSpec {
+    type Error = std::fmt::Error;
+    fn try_into(self) -> Result<Markdown, std::fmt::Error> {
+        let TestSpec { title, categories } = &self;
+        let mut buf = String::new();
+        writeln!(&mut buf, "# {title}")?;
+
+        if !categories.is_empty() {
+            writeln!(&mut buf)?;
+
+            for TestCategory { title, cases } in categories {
+                writeln!(&mut buf, "## {title}")?;
+
+                if !cases.is_empty() {
+                    writeln!(&mut buf)?;
+
+                    for TestCase {
+                        title,
+                        operations,
+                        confirmations,
+                        remarks,
+                    } in cases
+                    {
+                        writeln!(&mut buf, "### {title}")?;
+
+                        if !operations.is_empty() {
+                            writeln!(&mut buf)?;
+
+                            for (i, operation) in operations.iter().enumerate() {
+                                let order = i + 1;
+                                writeln!(&mut buf, "{order}. {operation}")?;
+                            }
+                        }
+
+                        if !confirmations.is_empty() {
+                            writeln!(&mut buf)?;
+
+                            for confirmation in confirmations {
+                                writeln!(&mut buf, "[ ] {confirmation}")?;
+                            }
+                        }
+
+                        if !remarks.is_empty() {
+                            writeln!(&mut buf)?;
+
+                            for remark in remarks {
+                                writeln!(&mut buf, "- {remark}")?;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Ok(buf)
     }
 }
 
@@ -158,7 +219,7 @@ categories:
         ];
 
         for (s, expected) in cases {
-            let actual = parse(&s).unwrap();
+            let actual: TestSpec = s.parse().unwrap();
             assert_eq!(expected, actual);
         }
     }
