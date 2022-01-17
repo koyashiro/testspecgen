@@ -8,21 +8,17 @@ use structopt::StructOpt;
 use super::generator;
 
 #[derive(Debug)]
-enum OutputFormat {
+enum Format {
     Markdown,
-    Json,
-    Yaml,
     Excel,
 }
 
-impl FromStr for OutputFormat {
+impl FromStr for Format {
     type Err = Error;
-    fn from_str(s: &str) -> Result<OutputFormat, Error> {
+    fn from_str(s: &str) -> Result<Format, Error> {
         match s.to_lowercase().as_ref() {
-            "markdown" => Ok(OutputFormat::Markdown),
-            "json" => Ok(OutputFormat::Json),
-            "yaml" => Ok(OutputFormat::Yaml),
-            "excel" => Ok(OutputFormat::Excel),
+            "markdown" => Ok(Format::Markdown),
+            "excel" => Ok(Format::Excel),
             _ => bail!("invalid output format"),
         }
     }
@@ -30,23 +26,28 @@ impl FromStr for OutputFormat {
 
 #[derive(Debug, StructOpt)]
 struct Opt {
-    #[structopt(long, default_value = "markdown")]
-    output_format: OutputFormat,
+    #[structopt(
+        name = "FORMAT",
+        long = "format",
+        short = "f",
+        default_value = "markdown"
+    )]
+    format: Format,
 
     #[structopt(name = "FILE")]
-    file: Option<String>,
+    file: String,
 }
 
 pub fn execute() -> Result<()> {
     let opt = Opt::from_args();
 
-    let s = match opt.file {
-        Some(f) => read_to_string(f)?,
-        None => {
+    let s = match opt.file.as_str() {
+        "-" => {
             let mut buf = String::new();
             io::stdin().lock().read_to_string(&mut buf)?;
             buf
         }
+        _ => read_to_string(&opt.file)?,
     };
 
     let testspec = s.parse()?;
@@ -57,20 +58,12 @@ pub fn execute() -> Result<()> {
         Binary(Vec<u8>),
     }
 
-    let output: Output = match opt.output_format {
-        OutputFormat::Markdown => {
+    let output: Output = match opt.format {
+        Format::Markdown => {
             let markdown = generator::generate_markdown(&testspec);
             Output::Text(markdown)
         }
-        OutputFormat::Yaml => {
-            let yaml = generator::generate_yaml(&testspec);
-            Output::Text(yaml)
-        }
-        OutputFormat::Json => {
-            let json = generator::generate_json(&testspec);
-            Output::Text(json)
-        }
-        OutputFormat::Excel => {
+        Format::Excel => {
             let excel = generator::generate_excel(&testspec);
             Output::Binary(excel)
         }
