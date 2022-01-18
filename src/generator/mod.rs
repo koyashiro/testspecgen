@@ -1,5 +1,3 @@
-use crate::testspec::TestSpec;
+mod markdown;
 
-pub fn generate_excel(testspec: &TestSpec) -> Vec<u8> {
-    unimplemented!()
-}
+pub use markdown::generate_markdown;

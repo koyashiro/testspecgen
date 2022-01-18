@@ -6,7 +6,8 @@ use std::str::FromStr;
 use anyhow::{bail, Error, Result};
 use structopt::StructOpt;
 
-use crate::testspec::{Markdown, TestSpec};
+use crate::generator::generate_markdown;
+use crate::testspec::TestSpec;
 
 #[derive(Debug)]
 enum Format {
@@ -70,13 +71,10 @@ pub fn execute() -> Result<()> {
         Input::PathBuf(p) => read_to_string(&p)?,
     };
 
-    let testspec: TestSpec = input.parse()?;
+    let spec: TestSpec = input.parse()?;
 
     let generated: Vec<u8> = match opt.format {
-        Format::Markdown => {
-            let markdown: Markdown = testspec.try_into()?;
-            markdown.into_bytes()
-        }
+        Format::Markdown => generate_markdown(&spec)?.into_bytes(),
         Format::Excel => {
             // generator::generate_excel(&testspec);
             Vec::new()

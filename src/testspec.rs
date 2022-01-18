@@ -1,4 +1,3 @@
-use std::fmt::Write;
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
@@ -56,63 +55,6 @@ impl FromStr for TestCase {
     type Err = serde_yaml::Error;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         serde_yaml::from_str(s)
-    }
-}
-
-pub type Markdown = String;
-
-impl TryInto<Markdown> for TestSpec {
-    type Error = std::fmt::Error;
-    fn try_into(self) -> Result<Markdown, std::fmt::Error> {
-        let TestSpec { title, categories } = &self;
-        let mut buf = String::new();
-        writeln!(&mut buf, "# {title}")?;
-
-        for TestCategory { title, cases } in categories {
-            writeln!(&mut buf)?;
-            writeln!(&mut buf, "## {title}")?;
-
-            for TestCase {
-                title,
-                operations,
-                confirmations,
-                remarks,
-            } in cases
-            {
-                writeln!(&mut buf)?;
-                writeln!(&mut buf, "### {title}")?;
-
-                for (i, operation) in operations.iter().enumerate() {
-                    if i == 0 {
-                        writeln!(&mut buf)?;
-                        writeln!(&mut buf, "#### Operations")?;
-                        writeln!(&mut buf)?;
-                    }
-                    let order = i + 1;
-                    writeln!(&mut buf, "{order}. {operation}")?;
-                }
-
-                for (i, confirmation) in confirmations.iter().enumerate() {
-                    if i == 0 {
-                        writeln!(&mut buf)?;
-                        writeln!(&mut buf, "#### Confirmation")?;
-                        writeln!(&mut buf)?;
-                    }
-                    writeln!(&mut buf, "- [ ] {confirmation}")?;
-                }
-
-                for (i, remark) in remarks.iter().enumerate() {
-                    if i == 0 {
-                        writeln!(&mut buf)?;
-                        writeln!(&mut buf, "#### Remarks")?;
-                        writeln!(&mut buf)?;
-                    }
-                    writeln!(&mut buf, "- {remark}")?;
-                }
-            }
-        }
-
-        Ok(buf)
     }
 }
 
