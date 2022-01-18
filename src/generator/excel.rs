@@ -85,5 +85,8 @@ pub fn generate_excel(spec: &TestSpec) -> Result<Vec<u8>, std::io::Error> {
         Ok(())
     })?;
 
-    book.close().map(|v| v.expect("book is None"))
+    book.close().map(|v| match v {
+        Some(v) => v,
+        None => unreachable!(),
+    })
 }
