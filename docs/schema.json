@@ -1,58 +1,74 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
+  "title": "Test spec",
   "required": ["title"],
   "properties": {
     "title": {
       "type": "string",
       "title": "Test spec title"
     },
-    "categories": {
+    "cases": {
       "type": "array",
-      "title": "Test categories",
+      "title": "Primary items",
       "items": {
         "type": "object",
-        "title": "Test category",
+        "title": "Primary item",
         "required": ["title"],
         "properties": {
           "title": {
             "type": "string",
-            "title": "Test category title"
+            "title": "Primary item title"
           },
-          "cases": {
+          "children": {
             "type": "array",
-            "title": "Test cases",
+            "title": "Secondary items",
             "items": {
               "type": "object",
-              "title": "Test title",
+              "title": "Secondary item",
               "required": ["title"],
               "properties": {
                 "title": {
                   "type": "string",
-                  "title": "Test category title"
+                  "title": "Tertiary item title"
                 },
-                "operations": {
+                "children": {
                   "type": "array",
-                  "title": "Operations",
+                  "title": "Tertiary items",
                   "items": {
-                    "type": "string",
-                    "title": "Operation"
-                  }
-                },
-                "confirmations": {
-                  "type": "array",
-                  "title": "Confirmations",
-                  "items": {
-                    "type": "string",
-                    "title": "Confirmation"
-                  }
-                },
-                "remarks": {
-                  "type": "array",
-                  "title": "Remarks",
-                  "items": {
-                    "type": "string",
-                    "title": "Remark"
+                    "type": "object",
+                    "title": "Tertiary item",
+                    "requires": ["title"],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "title": "Tertiary item title"
+                      },
+                      "operations": {
+                        "type": "array",
+                        "title": "Operations",
+                        "items": {
+                          "type": "string",
+                          "title": "Operation"
+                        }
+                      },
+                      "confirmations": {
+                        "type": "array",
+                        "title": "Confirmations",
+                        "items": {
+                          "type": "string",
+                          "title": "Confirmation"
+                        }
+                      },
+                      "remarks": {
+                        "type": "array",
+                        "title": "Remarks",
+                        "items": {
+                          "type": "string",
+                          "title": "Remark"
+                        }
+                      }
+                    }
                   }
                 }
               }
