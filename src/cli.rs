@@ -1,13 +1,12 @@
-use std::fs::read_to_string;
+use std::fs::{read_to_string, File};
 use std::io::{self, Read, Write};
+use std::path::PathBuf;
 use std::str::FromStr;
 
 use anyhow::{bail, Error, Result};
 use structopt::StructOpt;
 
 use crate::testspec::{Markdown, TestSpec};
-
-use super::generator;
 
 #[derive(Debug)]
 enum Format {
@@ -26,6 +25,22 @@ impl FromStr for Format {
     }
 }
 
+#[derive(Debug)]
+enum Input {
+    PathBuf(PathBuf),
+    StdIn,
+}
+
+impl FromStr for Input {
+    type Err = Error;
+    fn from_str(s: &str) -> Result<Input, Error> {
+        match s.to_lowercase().as_ref() {
+            "-" => Ok(Input::StdIn),
+            _ => Ok(Input::PathBuf(PathBuf::from(s))),
+        }
+    }
+}
+
 #[derive(Debug, StructOpt)]
 struct Opt {
     #[structopt(
@@ -36,48 +51,48 @@ struct Opt {
     )]
     format: Format,
 
-    #[structopt(name = "FILE")]
-    file: String,
+    #[structopt(name = "OUTPUT_FILE", long = "output", short = "o")]
+    output: Option<PathBuf>,
+
+    #[structopt(name = "INPUT_FILE")]
+    input: Input,
 }
 
 pub fn execute() -> Result<()> {
     let opt = Opt::from_args();
 
-    let s = match opt.file.as_str() {
-        "-" => {
+    let input = match opt.input {
+        Input::StdIn => {
             let mut buf = String::new();
             io::stdin().lock().read_to_string(&mut buf)?;
             buf
         }
-        _ => read_to_string(&opt.file)?,
+        Input::PathBuf(p) => read_to_string(&p)?,
     };
 
-    let testspec: TestSpec = s.parse()?;
+    let testspec: TestSpec = input.parse()?;
 
-    enum Output {
-        Text(String),
-        Binary(Vec<u8>),
-    }
-
-    let output: Output = match opt.format {
+    let generated: Vec<u8> = match opt.format {
         Format::Markdown => {
             let markdown: Markdown = testspec.try_into()?;
-            Output::Text(markdown)
+            markdown.into_bytes()
         }
         Format::Excel => {
-            let excel = generator::generate_excel(&testspec);
-            Output::Binary(excel)
+            // generator::generate_excel(&testspec);
+            Vec::new()
         }
     };
 
-    match output {
-        Output::Text(s) => println!("{}", s),
-        Output::Binary(b) => {
-            let mut out = io::stdout();
-            out.write_all(b.as_ref())?;
-            out.flush()?;
+    match &opt.output {
+        Some(p) => {
+            let mut f = File::create(p)?;
+            f.write_all(generated.as_ref())?;
         }
-    }
+        None => {
+            let mut out = io::stdout();
+            out.write_all(generated.as_ref())?;
+        }
+    };
 
     Ok(())
 }
