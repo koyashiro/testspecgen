@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["title"],
+  "properties": {
+    "title": { "type": "string", "description": "Test spec title" },
+    "categories": {
+      "type": "array",
+      "description": "Test categories",
+      "items": {
+        "type": "object",
+        "description": "Test category",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string", "description": "Test category title" },
+          "cases": {
+            "type": "array",
+            "description": "Test cases",
+            "items": {
+              "type": "object",
+              "description": "Test description",
+              "required": ["title"],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Test category title"
+                },
+                "operations": {
+                  "type": "array",
+                  "description": "Operations",
+                  "items": { "type": "string", "description": "Operation" }
+                },
+                "confirmations": {
+                  "type": "array",
+                  "description": "Confirmations",
+                  "items": { "type": "string", "description": "Confirmation" }
+                },
+                "remarks": {
+                  "type": "array",
+                  "description": "Remarks",
+                  "items": { "type": "string", "description": "Remark" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
