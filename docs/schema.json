@@ -3,42 +3,57 @@
   "type": "object",
   "required": ["title"],
   "properties": {
-    "title": { "type": "string", "description": "Test spec title" },
+    "title": {
+      "type": "string",
+      "title": "Test spec title"
+    },
     "categories": {
       "type": "array",
-      "description": "Test categories",
+      "title": "Test categories",
       "items": {
         "type": "object",
-        "description": "Test category",
+        "title": "Test category",
         "required": ["title"],
         "properties": {
-          "title": { "type": "string", "description": "Test category title" },
+          "title": {
+            "type": "string",
+            "title": "Test category title"
+          },
           "cases": {
             "type": "array",
-            "description": "Test cases",
+            "title": "Test cases",
             "items": {
               "type": "object",
-              "description": "Test description",
+              "title": "Test title",
               "required": ["title"],
               "properties": {
                 "title": {
                   "type": "string",
-                  "description": "Test category title"
+                  "title": "Test category title"
                 },
                 "operations": {
                   "type": "array",
-                  "description": "Operations",
-                  "items": { "type": "string", "description": "Operation" }
+                  "title": "Operations",
+                  "items": {
+                    "type": "string",
+                    "title": "Operation"
+                  }
                 },
                 "confirmations": {
                   "type": "array",
-                  "description": "Confirmations",
-                  "items": { "type": "string", "description": "Confirmation" }
+                  "title": "Confirmations",
+                  "items": {
+                    "type": "string",
+                    "title": "Confirmation"
+                  }
                 },
                 "remarks": {
                   "type": "array",
-                  "description": "Remarks",
-                  "items": { "type": "string", "description": "Remark" }
+                  "title": "Remarks",
+                  "items": {
+                    "type": "string",
+                    "title": "Remark"
+                  }
                 }
               }
             }
