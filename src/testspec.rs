@@ -68,49 +68,46 @@ impl TryInto<Markdown> for TestSpec {
         let mut buf = String::new();
         writeln!(&mut buf, "# {title}")?;
 
-        if !categories.is_empty() {
+        for TestCategory { title, cases } in categories {
             writeln!(&mut buf)?;
+            writeln!(&mut buf, "## {title}")?;
 
-            for TestCategory { title, cases } in categories {
-                writeln!(&mut buf, "## {title}")?;
+            for TestCase {
+                title,
+                operations,
+                confirmations,
+                remarks,
+            } in cases
+            {
+                writeln!(&mut buf)?;
+                writeln!(&mut buf, "### {title}")?;
 
-                if !cases.is_empty() {
-                    writeln!(&mut buf)?;
-
-                    for TestCase {
-                        title,
-                        operations,
-                        confirmations,
-                        remarks,
-                    } in cases
-                    {
-                        writeln!(&mut buf, "### {title}")?;
-
-                        if !operations.is_empty() {
-                            writeln!(&mut buf)?;
-
-                            for (i, operation) in operations.iter().enumerate() {
-                                let order = i + 1;
-                                writeln!(&mut buf, "{order}. {operation}")?;
-                            }
-                        }
-
-                        if !confirmations.is_empty() {
-                            writeln!(&mut buf)?;
-
-                            for confirmation in confirmations {
-                                writeln!(&mut buf, "[ ] {confirmation}")?;
-                            }
-                        }
-
-                        if !remarks.is_empty() {
-                            writeln!(&mut buf)?;
-
-                            for remark in remarks {
-                                writeln!(&mut buf, "- {remark}")?;
-                            }
-                        }
+                for (i, operation) in operations.iter().enumerate() {
+                    if i == 0 {
+                        writeln!(&mut buf)?;
+                        writeln!(&mut buf, "#### Operations")?;
+                        writeln!(&mut buf)?;
                     }
+                    let order = i + 1;
+                    writeln!(&mut buf, "{order}. {operation}")?;
+                }
+
+                for (i, confirmation) in confirmations.iter().enumerate() {
+                    if i == 0 {
+                        writeln!(&mut buf)?;
+                        writeln!(&mut buf, "#### Confirmation")?;
+                        writeln!(&mut buf)?;
+                    }
+                    writeln!(&mut buf, "- [ ] {confirmation}")?;
+                }
+
+                for (i, remark) in remarks.iter().enumerate() {
+                    if i == 0 {
+                        writeln!(&mut buf)?;
+                        writeln!(&mut buf, "#### Remarks")?;
+                        writeln!(&mut buf)?;
+                    }
+                    writeln!(&mut buf, "- {remark}")?;
                 }
             }
         }
