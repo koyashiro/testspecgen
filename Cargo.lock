@@ -243,18 +243,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mdtestspec"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "mktemp",
- "serde",
- "serde_yaml",
- "structopt",
- "xlsxwriter",
-]
-
-[[package]]
 name = "memchr"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -442,6 +430,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2dfed899f0eb03f32ee8c6a0aabdb8a7949659e3466561fc0adf54e26d88c5f4"
 dependencies = [
  "winapi-util",
+]
+
+[[package]]
+name = "testspecgen"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "mktemp",
+ "serde",
+ "serde_yaml",
+ "structopt",
+ "xlsxwriter",
 ]
 
 [[package]]

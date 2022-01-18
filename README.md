@@ -1,1 +1,1 @@
-# mdtestspec-rs
+# testspecgen
