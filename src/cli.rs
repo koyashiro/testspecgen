@@ -6,7 +6,7 @@ use std::str::FromStr;
 use anyhow::{bail, Error, Result};
 use structopt::StructOpt;
 
-use crate::generator::generate_markdown;
+use crate::generator::{generate_excel, generate_markdown};
 use crate::testspec::TestSpec;
 
 #[derive(Debug)]
@@ -75,10 +75,7 @@ pub fn execute() -> Result<()> {
 
     let generated: Vec<u8> = match opt.format {
         Format::Markdown => generate_markdown(&spec)?.into_bytes(),
-        Format::Excel => {
-            // generator::generate_excel(&testspec);
-            Vec::new()
-        }
+        Format::Excel => generate_excel(&spec)?,
     };
 
     match &opt.output {
