@@ -26,24 +26,14 @@ impl FromStr for Format {
     }
 }
 
-#[derive(Debug)]
-enum Input {
-    PathBuf(PathBuf),
-    StdIn,
-}
-
-impl FromStr for Input {
-    type Err = Error;
-    fn from_str(s: &str) -> Result<Input, Error> {
-        match s.to_lowercase().as_ref() {
-            "-" => Ok(Input::StdIn),
-            _ => Ok(Input::PathBuf(PathBuf::from(s))),
-        }
-    }
-}
-
 #[derive(Debug, StructOpt)]
 struct Opt {
+    #[structopt(name = "INPUT")]
+    input: String,
+
+    #[structopt(name = "OUTPUT")]
+    output: String,
+
     #[structopt(
         name = "FORMAT",
         long = "format",
@@ -51,9 +41,6 @@ struct Opt {
         default_value = "markdown"
     )]
     format: Format,
-
-    #[structopt(name = "OUTPUT_FILE", long = "output", short = "o")]
-    output: Option<PathBuf>,
 
     #[structopt(name = "NO_COLUMN", long = "no-column", default_value = "No.")]
     no_column: String,
@@ -116,21 +103,18 @@ struct Opt {
 
     #[structopt(name = "FONT", long = "font", default_value = "Yu Gothic")]
     font: String,
-
-    #[structopt(name = "INPUT_FILE")]
-    input: Input,
 }
 
 pub fn execute() -> Result<()> {
     let opt = Opt::from_args();
 
-    let input = match opt.input {
-        Input::StdIn => {
+    let input = match opt.input.as_str() {
+        "-" => {
             let mut buf = String::new();
             io::stdin().lock().read_to_string(&mut buf)?;
             buf
         }
-        Input::PathBuf(p) => read_to_string(&p)?,
+        _ => read_to_string(&opt.input)?,
     };
 
     let spec: TestSpec = input.parse()?;
@@ -154,14 +138,14 @@ pub fn execute() -> Result<()> {
         Format::Excel => generate_excel(&spec, &option)?,
     };
 
-    match &opt.output {
-        Some(p) => {
-            let mut f = File::create(p)?;
-            f.write_all(generated.as_ref())?;
-        }
-        None => {
+    match opt.output.as_str() {
+        "-" => {
             let mut out = io::stdout();
             out.write_all(generated.as_ref())?;
+        }
+        _ => {
+            let mut f = File::create(&opt.output)?;
+            f.write_all(generated.as_ref())?;
         }
     };
 
