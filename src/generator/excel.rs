@@ -96,7 +96,11 @@ fn setup_body(
 
     let mut row = 1;
     for primary in spec.cases.iter() {
+        let primary_start_row_no = row;
+
         for secondary in primary.children.iter() {
+            let secondary_start_row_no = row;
+
             for tertiary in secondary.children.iter() {
                 let operations_string = tertiary
                     .operations
@@ -121,8 +125,6 @@ fn setup_body(
                     .join("\n");
 
                 sheet.write_number(row, 0, row as _, Some(&center_align_format))?;
-                sheet.write_string(row, 1, &primary.title, Some(&center_align_format))?;
-                sheet.write_string(row, 2, &secondary.title, Some(&center_align_format))?;
                 sheet.write_string(row, 3, &tertiary.title, Some(&center_align_format))?;
                 sheet.write_blank(row, 4, Some(&center_align_format))?;
                 sheet.write_blank(row, 5, Some(&center_align_format))?;
@@ -132,7 +134,27 @@ fn setup_body(
 
                 row += 1;
             }
+
+            let secondary_end_row_no = row - 1;
+            sheet.merge_range(
+                secondary_start_row_no,
+                2,
+                secondary_end_row_no,
+                2,
+                &secondary.title,
+                Some(&center_align_format),
+            )?;
         }
+
+        let primary_end_row_no = row - 1;
+        sheet.merge_range(
+            primary_start_row_no,
+            1,
+            primary_end_row_no,
+            1,
+            &primary.title,
+            Some(&center_align_format),
+        )?;
     }
 
     Ok(())
