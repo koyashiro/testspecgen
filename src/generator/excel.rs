@@ -3,7 +3,9 @@ use crate::testspec::TestSpec;
 use mktemp::Temp;
 use xlsxwriter::{FormatAlignment, FormatBorder, FormatColor, Workbook, Worksheet, XlsxError};
 
-pub fn generate_excel(spec: &TestSpec) -> anyhow::Result<Vec<u8>> {
+use super::ColumnOption;
+
+pub fn generate_excel(spec: &TestSpec, column_option: &ColumnOption) -> anyhow::Result<Vec<u8>> {
     let temp_file = Temp::new_file()?;
     let filename = match temp_file.to_str() {
         Some(s) => s,
@@ -16,7 +18,7 @@ pub fn generate_excel(spec: &TestSpec) -> anyhow::Result<Vec<u8>> {
     let border_color = FormatColor::Custom(0x5b9bd5);
 
     setup_columns(&mut sheet)?;
-    setup_header(&book, &mut sheet, border_color)?;
+    setup_header(&book, &mut sheet, border_color, column_option)?;
     setup_body(&book, &mut sheet, &spec, border_color)?;
 
     book.close()?;
@@ -44,6 +46,7 @@ fn setup_header(
     book: &Workbook,
     sheet: &mut Worksheet,
     border_color: FormatColor,
+    column_option: &ColumnOption,
 ) -> Result<(), XlsxError> {
     let header_format = book
         .add_format()
@@ -57,15 +60,15 @@ fn setup_header(
         .set_bold()
         .set_bg_color(border_color);
 
-    sheet.write_string(0, 0, "No.", Some(&header_format))?;
-    sheet.write_string(0, 1, "Primary Item", Some(&header_format))?;
-    sheet.write_string(0, 2, "Secondary Item", Some(&header_format))?;
-    sheet.write_string(0, 3, "Tertiary Item", Some(&header_format))?;
-    sheet.write_string(0, 4, "Operator", Some(&header_format))?;
-    sheet.write_string(0, 5, "Result", Some(&header_format))?;
-    sheet.write_string(0, 6, "Operations", Some(&header_format))?;
-    sheet.write_string(0, 7, "Confirmations", Some(&header_format))?;
-    sheet.write_string(0, 8, "Remarks", Some(&header_format))?;
+    sheet.write_string(0, 0, column_option.no, Some(&header_format))?;
+    sheet.write_string(0, 1, column_option.primary_item, Some(&header_format))?;
+    sheet.write_string(0, 2, column_option.secondary_item, Some(&header_format))?;
+    sheet.write_string(0, 3, column_option.tertiary_item, Some(&header_format))?;
+    sheet.write_string(0, 4, column_option.operator, Some(&header_format))?;
+    sheet.write_string(0, 5, column_option.result, Some(&header_format))?;
+    sheet.write_string(0, 6, column_option.operations, Some(&header_format))?;
+    sheet.write_string(0, 7, column_option.confirmations, Some(&header_format))?;
+    sheet.write_string(0, 8, column_option.remarks, Some(&header_format))?;
 
     Ok(())
 }

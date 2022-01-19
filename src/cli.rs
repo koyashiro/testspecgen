@@ -6,7 +6,7 @@ use std::str::FromStr;
 use anyhow::{bail, Error, Result};
 use structopt::StructOpt;
 
-use crate::generator::{generate_excel, generate_markdown};
+use crate::generator::{generate_excel, generate_markdown, ColumnOption};
 use crate::testspec::TestSpec;
 
 #[derive(Debug)]
@@ -55,6 +55,65 @@ struct Opt {
     #[structopt(name = "OUTPUT_FILE", long = "output", short = "o")]
     output: Option<PathBuf>,
 
+    #[structopt(name = "NO_COLUMN", long = "no--column", default_value = "No.")]
+    no_column: String,
+
+    #[structopt(
+        name = "PRIMARY_ITEM_COLUMN",
+        long = "primary--item--column",
+        default_value = "Primary Item"
+    )]
+    primary_item_column: String,
+
+    #[structopt(
+        name = "SECONDARY_ITEM_COLUMN",
+        long = "secondary--item--column",
+        default_value = "Secondary Item"
+    )]
+    secondary_item_column: String,
+
+    #[structopt(
+        name = "TERTIARY_ITEM_COLUMN",
+        long = "tertiary--item--column",
+        default_value = "Tertiary Item"
+    )]
+    tertiary_item_column: String,
+
+    #[structopt(
+        name = "OPERATOR_COLUMN",
+        long = "operator--column",
+        default_value = "Operator"
+    )]
+    operator_column: String,
+
+    #[structopt(
+        name = "RESULT_COLUMN",
+        long = "result--column",
+        default_value = "Result"
+    )]
+    result_column: String,
+
+    #[structopt(
+        name = "OPERATIONS_COLUMN",
+        long = "operations--column",
+        default_value = "Operations"
+    )]
+    operations_column: String,
+
+    #[structopt(
+        name = "CONFIRMATIONS_COLUMN",
+        long = "confirmations--column",
+        default_value = "Confirmations"
+    )]
+    confirmations_column: String,
+
+    #[structopt(
+        name = "REMARKS_COLUMN",
+        long = "remarks--column",
+        default_value = "Remarks"
+    )]
+    remarks_column: String,
+
     #[structopt(name = "INPUT_FILE")]
     input: Input,
 }
@@ -73,9 +132,21 @@ pub fn execute() -> Result<()> {
 
     let spec: TestSpec = input.parse()?;
 
+    let column_option = ColumnOption {
+        no: &opt.no_column,
+        primary_item: &opt.primary_item_column,
+        secondary_item: &opt.secondary_item_column,
+        tertiary_item: &opt.tertiary_item_column,
+        operator: &opt.operator_column,
+        result: &opt.result_column,
+        operations: &opt.operations_column,
+        confirmations: &opt.confirmations_column,
+        remarks: &opt.remarks_column,
+    };
+
     let generated: Vec<u8> = match opt.format {
         Format::Markdown => generate_markdown(&spec)?.into_bytes(),
-        Format::Excel => generate_excel(&spec)?,
+        Format::Excel => generate_excel(&spec, &column_option)?,
     };
 
     match &opt.output {
