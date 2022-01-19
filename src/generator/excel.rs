@@ -3,9 +3,9 @@ use crate::testspec::TestSpec;
 use mktemp::Temp;
 use xlsxwriter::{FormatAlignment, FormatBorder, FormatColor, Workbook, Worksheet, XlsxError};
 
-use super::ColumnOption;
+use super::GenerateOption;
 
-pub fn generate_excel(spec: &TestSpec, column_option: &ColumnOption) -> anyhow::Result<Vec<u8>> {
+pub fn generate_excel(spec: &TestSpec, option: &GenerateOption) -> anyhow::Result<Vec<u8>> {
     let temp_file = Temp::new_file()?;
     let filename = match temp_file.to_str() {
         Some(s) => s,
@@ -18,8 +18,8 @@ pub fn generate_excel(spec: &TestSpec, column_option: &ColumnOption) -> anyhow::
     let border_color = FormatColor::Custom(0x5b9bd5);
 
     setup_columns(&mut sheet)?;
-    setup_header(&book, &mut sheet, border_color, column_option)?;
-    setup_body(&book, &mut sheet, &spec, border_color)?;
+    setup_header(&book, &mut sheet, border_color, option)?;
+    setup_body(&book, &mut sheet, &spec, border_color, option)?;
 
     book.close()?;
 
@@ -46,11 +46,11 @@ fn setup_header(
     book: &Workbook,
     sheet: &mut Worksheet,
     border_color: FormatColor,
-    column_option: &ColumnOption,
+    option: &GenerateOption,
 ) -> Result<(), XlsxError> {
     let header_format = book
         .add_format()
-        .set_font_name("Yu Gothic")
+        .set_font_name(option.font)
         .set_border(FormatBorder::Medium)
         .set_border_color(border_color)
         .set_text_wrap()
@@ -60,15 +60,35 @@ fn setup_header(
         .set_bold()
         .set_bg_color(border_color);
 
-    sheet.write_string(0, 0, column_option.no, Some(&header_format))?;
-    sheet.write_string(0, 1, column_option.primary_item, Some(&header_format))?;
-    sheet.write_string(0, 2, column_option.secondary_item, Some(&header_format))?;
-    sheet.write_string(0, 3, column_option.tertiary_item, Some(&header_format))?;
-    sheet.write_string(0, 4, column_option.operator, Some(&header_format))?;
-    sheet.write_string(0, 5, column_option.result, Some(&header_format))?;
-    sheet.write_string(0, 6, column_option.operations, Some(&header_format))?;
-    sheet.write_string(0, 7, column_option.confirmations, Some(&header_format))?;
-    sheet.write_string(0, 8, column_option.remarks, Some(&header_format))?;
+    sheet.write_string(0, 0, option.column_option.no, Some(&header_format))?;
+    sheet.write_string(
+        0,
+        1,
+        option.column_option.primary_item,
+        Some(&header_format),
+    )?;
+    sheet.write_string(
+        0,
+        2,
+        option.column_option.secondary_item,
+        Some(&header_format),
+    )?;
+    sheet.write_string(
+        0,
+        3,
+        option.column_option.tertiary_item,
+        Some(&header_format),
+    )?;
+    sheet.write_string(0, 4, option.column_option.operator, Some(&header_format))?;
+    sheet.write_string(0, 5, option.column_option.result, Some(&header_format))?;
+    sheet.write_string(0, 6, option.column_option.operations, Some(&header_format))?;
+    sheet.write_string(
+        0,
+        7,
+        option.column_option.confirmations,
+        Some(&header_format),
+    )?;
+    sheet.write_string(0, 8, option.column_option.remarks, Some(&header_format))?;
 
     Ok(())
 }
@@ -78,10 +98,11 @@ fn setup_body(
     sheet: &mut Worksheet,
     spec: &TestSpec,
     border_color: FormatColor,
+    option: &GenerateOption,
 ) -> Result<(), XlsxError> {
     let center_align_format = book
         .add_format()
-        .set_font_name("Yu Gothic")
+        .set_font_name(option.font)
         .set_text_wrap()
         .set_border(FormatBorder::Medium)
         .set_border_color(border_color)
@@ -90,7 +111,7 @@ fn setup_body(
 
     let left_align_format = book
         .add_format()
-        .set_font_name("Yu Gothic")
+        .set_font_name(option.font)
         .set_text_wrap()
         .set_border(FormatBorder::Medium)
         .set_border_color(border_color)

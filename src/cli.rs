@@ -6,7 +6,7 @@ use std::str::FromStr;
 use anyhow::{bail, Error, Result};
 use structopt::StructOpt;
 
-use crate::generator::{generate_excel, generate_markdown, ColumnOption};
+use crate::generator::{generate_excel, generate_markdown, ColumnOption, GenerateOption};
 use crate::testspec::TestSpec;
 
 #[derive(Debug)]
@@ -114,6 +114,9 @@ struct Opt {
     )]
     remarks_column: String,
 
+    #[structopt(name = "FONT", long = "font", default_value = "Yu Gothic")]
+    font: String,
+
     #[structopt(name = "INPUT_FILE")]
     input: Input,
 }
@@ -132,21 +135,23 @@ pub fn execute() -> Result<()> {
 
     let spec: TestSpec = input.parse()?;
 
-    let column_option = ColumnOption {
-        no: &opt.no_column,
-        primary_item: &opt.primary_item_column,
-        secondary_item: &opt.secondary_item_column,
-        tertiary_item: &opt.tertiary_item_column,
-        operator: &opt.operator_column,
-        result: &opt.result_column,
-        operations: &opt.operations_column,
-        confirmations: &opt.confirmations_column,
-        remarks: &opt.remarks_column,
+    let option = GenerateOption {
+        column_option: &ColumnOption {
+            no: &opt.no_column,
+            primary_item: &opt.primary_item_column,
+            secondary_item: &opt.secondary_item_column,
+            tertiary_item: &opt.tertiary_item_column,
+            operator: &opt.operator_column,
+            result: &opt.result_column,
+            operations: &opt.operations_column,
+            confirmations: &opt.confirmations_column,
+            remarks: &opt.remarks_column,
+        },
+        font: &opt.font,
     };
-
     let generated: Vec<u8> = match opt.format {
         Format::Markdown => generate_markdown(&spec)?.into_bytes(),
-        Format::Excel => generate_excel(&spec, &column_option)?,
+        Format::Excel => generate_excel(&spec, &option)?,
     };
 
     match &opt.output {

@@ -5,6 +5,12 @@ pub use excel::generate_excel;
 pub use markdown::generate_markdown;
 
 #[derive(Debug)]
+pub struct GenerateOption<'a> {
+    pub column_option: &'a ColumnOption<'a>,
+    pub font: &'a str,
+}
+
+#[derive(Debug)]
 pub struct ColumnOption<'a> {
     pub no: &'a str,
     pub primary_item: &'a str,
