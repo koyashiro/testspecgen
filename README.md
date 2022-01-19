@@ -164,7 +164,7 @@ cases:
 ### Generate Markdown
 
 ```sh
-testspecgen -f markdown example.yml example.markdown
+testspecgen -f markdown example.yml example.md
 ```
 
 <details>
