@@ -55,61 +55,61 @@ struct Opt {
     #[structopt(name = "OUTPUT_FILE", long = "output", short = "o")]
     output: Option<PathBuf>,
 
-    #[structopt(name = "NO_COLUMN", long = "no--column", default_value = "No.")]
+    #[structopt(name = "NO_COLUMN", long = "no-column", default_value = "No.")]
     no_column: String,
 
     #[structopt(
         name = "PRIMARY_ITEM_COLUMN",
-        long = "primary--item--column",
+        long = "primary-item-column",
         default_value = "Primary Item"
     )]
     primary_item_column: String,
 
     #[structopt(
         name = "SECONDARY_ITEM_COLUMN",
-        long = "secondary--item--column",
+        long = "secondary-item-column",
         default_value = "Secondary Item"
     )]
     secondary_item_column: String,
 
     #[structopt(
         name = "TERTIARY_ITEM_COLUMN",
-        long = "tertiary--item--column",
+        long = "tertiary-item-column",
         default_value = "Tertiary Item"
     )]
     tertiary_item_column: String,
 
     #[structopt(
         name = "OPERATOR_COLUMN",
-        long = "operator--column",
+        long = "operator-column",
         default_value = "Operator"
     )]
     operator_column: String,
 
     #[structopt(
         name = "RESULT_COLUMN",
-        long = "result--column",
+        long = "result-column",
         default_value = "Result"
     )]
     result_column: String,
 
     #[structopt(
         name = "OPERATIONS_COLUMN",
-        long = "operations--column",
+        long = "operations-column",
         default_value = "Operations"
     )]
     operations_column: String,
 
     #[structopt(
         name = "CONFIRMATIONS_COLUMN",
-        long = "confirmations--column",
+        long = "confirmations-column",
         default_value = "Confirmations"
     )]
     confirmations_column: String,
 
     #[structopt(
         name = "REMARKS_COLUMN",
-        long = "remarks--column",
+        long = "remarks-column",
         default_value = "Remarks"
     )]
     remarks_column: String,
