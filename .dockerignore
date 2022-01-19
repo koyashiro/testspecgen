@@ -1,0 +1,10 @@
+.git
+.github
+docs/
+target/
+.dockerignore
+.gitattribuges
+.gitignore
+Dockerfile
+README.md
+renovate.json
