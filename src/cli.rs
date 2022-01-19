@@ -1,6 +1,5 @@
 use std::fs::{read_to_string, File};
 use std::io::{self, Read, Write};
-use std::path::PathBuf;
 use std::str::FromStr;
 
 use anyhow::{bail, Error, Result};
