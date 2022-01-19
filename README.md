@@ -1,5 +1,15 @@
 # testspecgen
 
+## Installation
+
+### Build requirements
+
+- LLVM and Clang
+
+```sh
+cargo install --git https://github.com/koyashiro/testspecgen
+```
+
 ## Usage
 
 ```
