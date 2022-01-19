@@ -38,70 +38,79 @@ struct Opt {
         name = "FORMAT",
         long = "format",
         short = "f",
-        default_value = "markdown"
+        default_value = "markdown",
+        env
     )]
     format: Format,
 
-    #[structopt(name = "NO_COLUMN", long = "no-column", default_value = "No.")]
+    #[structopt(name = "NO_COLUMN", long = "no-column", default_value = "No.", env)]
     no_column: String,
 
     #[structopt(
         name = "PRIMARY_ITEM_COLUMN",
         long = "primary-item-column",
-        default_value = "Primary Item"
+        default_value = "Primary Item",
+        env
     )]
     primary_item_column: String,
 
     #[structopt(
         name = "SECONDARY_ITEM_COLUMN",
         long = "secondary-item-column",
-        default_value = "Secondary Item"
+        default_value = "Secondary Item",
+        env
     )]
     secondary_item_column: String,
 
     #[structopt(
         name = "TERTIARY_ITEM_COLUMN",
         long = "tertiary-item-column",
-        default_value = "Tertiary Item"
+        default_value = "Tertiary Item",
+        env
     )]
     tertiary_item_column: String,
 
     #[structopt(
         name = "OPERATOR_COLUMN",
         long = "operator-column",
-        default_value = "Operator"
+        default_value = "Operator",
+        env
     )]
     operator_column: String,
 
     #[structopt(
         name = "RESULT_COLUMN",
         long = "result-column",
-        default_value = "Result"
+        default_value = "Result",
+        env
     )]
     result_column: String,
 
     #[structopt(
         name = "OPERATIONS_COLUMN",
         long = "operations-column",
-        default_value = "Operations"
+        default_value = "Operations",
+        env
     )]
     operations_column: String,
 
     #[structopt(
         name = "CONFIRMATIONS_COLUMN",
         long = "confirmations-column",
-        default_value = "Confirmations"
+        default_value = "Confirmations",
+        env
     )]
     confirmations_column: String,
 
     #[structopt(
         name = "REMARKS_COLUMN",
         long = "remarks-column",
-        default_value = "Remarks"
+        default_value = "Remarks",
+        env
     )]
     remarks_column: String,
 
-    #[structopt(name = "FONT", long = "font", default_value = "Yu Gothic")]
+    #[structopt(name = "FONT", long = "font", default_value = "Yu Gothic", env)]
     font: String,
 }
 
