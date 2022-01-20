@@ -15,11 +15,9 @@ pub fn generate_excel(spec: &TestSpec, option: &GenerateOption) -> anyhow::Resul
     let book = Workbook::new(filename);
     let mut sheet = book.add_worksheet(Some(&spec.title))?;
 
-    let border_color = FormatColor::Custom(0x5b9bd5);
-
-    setup_columns(&mut sheet)?;
-    setup_header(&book, &mut sheet, border_color, option)?;
-    setup_body(&book, &mut sheet, &spec, border_color, option)?;
+    setup_columns(&mut sheet, option)?;
+    setup_header(&book, &mut sheet, option)?;
+    setup_body(&book, &mut sheet, &spec, option)?;
 
     book.close()?;
 
@@ -28,16 +26,10 @@ pub fn generate_excel(spec: &TestSpec, option: &GenerateOption) -> anyhow::Resul
     Ok(bytes)
 }
 
-fn setup_columns(sheet: &mut Worksheet) -> Result<(), XlsxError> {
-    sheet.set_column(0, 0, 8f64, None)?;
-    sheet.set_column(1, 1, 16f64, None)?;
-    sheet.set_column(2, 2, 16f64, None)?;
-    sheet.set_column(3, 3, 16f64, None)?;
-    sheet.set_column(4, 4, 12f64, None)?;
-    sheet.set_column(5, 5, 8f64, None)?;
-    sheet.set_column(6, 6, 60f64, None)?;
-    sheet.set_column(7, 7, 60f64, None)?;
-    sheet.set_column(8, 8, 60f64, None)?;
+fn setup_columns(sheet: &mut Worksheet, option: &GenerateOption) -> Result<(), XlsxError> {
+    for (i, o) in option.column_options.into_iter().enumerate() {
+        sheet.set_column(i as _, i as _, o.width, None)?;
+    }
 
     Ok(())
 }
@@ -45,50 +37,24 @@ fn setup_columns(sheet: &mut Worksheet) -> Result<(), XlsxError> {
 fn setup_header(
     book: &Workbook,
     sheet: &mut Worksheet,
-    border_color: FormatColor,
     option: &GenerateOption,
 ) -> Result<(), XlsxError> {
+    const ROW: u32 = 0;
     let header_format = book
         .add_format()
-        .set_font_name(option.font)
+        .set_font_name(&option.font_family)
         .set_border(FormatBorder::Medium)
-        .set_border_color(border_color)
+        .set_border_color(FormatColor::Custom(option.border_color))
         .set_text_wrap()
         .set_align(FormatAlignment::Center)
         .set_align(FormatAlignment::VerticalCenter)
-        .set_font_color(FormatColor::White)
+        .set_font_color(FormatColor::Custom(option.header_font_color))
         .set_bold()
-        .set_bg_color(border_color);
+        .set_bg_color(FormatColor::Custom(option.header_bg_color));
 
-    sheet.write_string(0, 0, option.column_option.no, Some(&header_format))?;
-    sheet.write_string(
-        0,
-        1,
-        option.column_option.primary_item,
-        Some(&header_format),
-    )?;
-    sheet.write_string(
-        0,
-        2,
-        option.column_option.secondary_item,
-        Some(&header_format),
-    )?;
-    sheet.write_string(
-        0,
-        3,
-        option.column_option.tertiary_item,
-        Some(&header_format),
-    )?;
-    sheet.write_string(0, 4, option.column_option.operator, Some(&header_format))?;
-    sheet.write_string(0, 5, option.column_option.result, Some(&header_format))?;
-    sheet.write_string(0, 6, option.column_option.operations, Some(&header_format))?;
-    sheet.write_string(
-        0,
-        7,
-        option.column_option.confirmations,
-        Some(&header_format),
-    )?;
-    sheet.write_string(0, 8, option.column_option.remarks, Some(&header_format))?;
+    for (i, o) in option.column_options.into_iter().enumerate() {
+        sheet.write_string(ROW, i as _, &o.header, Some(&header_format))?;
+    }
 
     Ok(())
 }
@@ -97,24 +63,23 @@ fn setup_body(
     book: &Workbook,
     sheet: &mut Worksheet,
     spec: &TestSpec,
-    border_color: FormatColor,
     option: &GenerateOption,
 ) -> Result<(), XlsxError> {
     let center_align_format = book
         .add_format()
-        .set_font_name(option.font)
+        .set_font_name(&option.font_family)
         .set_text_wrap()
         .set_border(FormatBorder::Medium)
-        .set_border_color(border_color)
+        .set_border_color(FormatColor::Custom(option.border_color))
         .set_align(FormatAlignment::Center)
         .set_align(FormatAlignment::VerticalCenter);
 
     let left_align_format = book
         .add_format()
-        .set_font_name(option.font)
+        .set_font_name(&option.font_family)
         .set_text_wrap()
         .set_border(FormatBorder::Medium)
-        .set_border_color(border_color)
+        .set_border_color(FormatColor::Custom(option.border_color))
         .set_align(FormatAlignment::Left)
         .set_align(FormatAlignment::VerticalTop);
 
