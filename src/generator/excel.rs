@@ -118,8 +118,9 @@ fn setup_body(
         .set_align(FormatAlignment::Left)
         .set_align(FormatAlignment::VerticalCenter);
 
-    let mut row = 1;
+    let mut row = 0;
     for primary in spec.cases.iter() {
+        row += 1;
         let primary_start_row_no = row;
 
         for secondary in primary.children.iter() {
@@ -155,30 +156,36 @@ fn setup_body(
                 sheet.write_string(row, 6, &operations_string, Some(&left_align_format))?;
                 sheet.write_string(row, 7, &confirmations_string, Some(&left_align_format))?;
                 sheet.write_string(row, 8, &remarks_string, Some(&left_align_format))?;
-
-                row += 1;
             }
 
-            let secondary_end_row_no = row - 1;
+            let secondary_end_row_no = row;
+            if secondary_start_row_no == secondary_end_row_no {
+                sheet.write_string(row, 2, &secondary.title, Some(&center_align_format))?;
+            } else {
+                sheet.merge_range(
+                    secondary_start_row_no,
+                    2,
+                    secondary_end_row_no,
+                    2,
+                    &secondary.title,
+                    Some(&center_align_format),
+                )?;
+            }
+        }
+
+        let primary_end_row_no = row;
+        if primary_start_row_no == primary_end_row_no {
+            sheet.write_string(row, 1, &primary.title, Some(&center_align_format))?;
+        } else {
             sheet.merge_range(
-                secondary_start_row_no,
-                2,
-                secondary_end_row_no,
-                2,
-                &secondary.title,
+                primary_start_row_no,
+                1,
+                primary_end_row_no,
+                1,
+                &primary.title,
                 Some(&center_align_format),
             )?;
         }
-
-        let primary_end_row_no = row - 1;
-        sheet.merge_range(
-            primary_start_row_no,
-            1,
-            primary_end_row_no,
-            1,
-            &primary.title,
-            Some(&center_align_format),
-        )?;
     }
 
     Ok(())
