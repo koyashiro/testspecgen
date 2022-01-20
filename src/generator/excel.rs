@@ -116,7 +116,7 @@ fn setup_body(
         .set_border(FormatBorder::Medium)
         .set_border_color(border_color)
         .set_align(FormatAlignment::Left)
-        .set_align(FormatAlignment::VerticalCenter);
+        .set_align(FormatAlignment::VerticalTop);
 
     let mut row = 0;
     for primary in spec.cases.iter() {
