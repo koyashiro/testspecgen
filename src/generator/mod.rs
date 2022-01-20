@@ -6,7 +6,7 @@ pub use markdown::generate_markdown;
 
 #[derive(Debug)]
 pub struct GenerateOption<'a> {
-    pub column_option: &'a ColumnOption<'a>,
+    pub column_option: ColumnOption<'a>,
     pub font: &'a str,
 }
 

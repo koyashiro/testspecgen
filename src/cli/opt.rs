@@ -1,7 +1,10 @@
 use std::str::FromStr;
+// std::ops::Generator
 
 use anyhow::{bail, Error};
 use structopt::StructOpt;
+
+use crate::generator::{ColumnOption, GenerateOption};
 
 #[derive(Debug)]
 pub enum Format {
@@ -106,4 +109,23 @@ pub struct Opt {
 
     #[structopt(name = "FONT", long = "font", default_value = "Yu Gothic", env)]
     pub font: String,
+}
+
+impl Opt {
+    pub fn as_generate_option(&self) -> GenerateOption {
+        GenerateOption {
+            column_option: ColumnOption {
+                no: &self.no_column,
+                primary_item: &self.primary_item_column,
+                secondary_item: &self.secondary_item_column,
+                tertiary_item: &self.tertiary_item_column,
+                operator: &self.operator_column,
+                result: &self.result_column,
+                operations: &self.operations_column,
+                confirmations: &self.confirmations_column,
+                remarks: &self.remarks_column,
+            },
+            font: &self.font,
+        }
+    }
 }
