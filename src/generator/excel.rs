@@ -118,13 +118,40 @@ fn setup_body(
         .set_align(FormatAlignment::Left)
         .set_align(FormatAlignment::VerticalTop);
 
-    let mut row = 0;
+    let mut row = 1;
     for primary in spec.cases.iter() {
-        row += 1;
         let primary_start_row_no = row;
+
+        if primary.children.is_empty() {
+            sheet.write_number(row, 0, row as _, Some(&center_align_format))?;
+            sheet.write_blank(row, 1, Some(&center_align_format))?;
+            sheet.write_blank(row, 2, Some(&center_align_format))?;
+            sheet.write_blank(row, 3, Some(&center_align_format))?;
+            sheet.write_blank(row, 4, Some(&center_align_format))?;
+            sheet.write_blank(row, 5, Some(&center_align_format))?;
+            sheet.write_blank(row, 6, Some(&left_align_format))?;
+            sheet.write_blank(row, 7, Some(&left_align_format))?;
+            sheet.write_blank(row, 8, Some(&left_align_format))?;
+            row += 1;
+            continue;
+        }
 
         for secondary in primary.children.iter() {
             let secondary_start_row_no = row;
+
+            if secondary.children.is_empty() {
+                sheet.write_number(row, 0, row as _, Some(&center_align_format))?;
+                sheet.write_string(row, 1, &primary.title, Some(&center_align_format))?;
+                sheet.write_blank(row, 2, Some(&center_align_format))?;
+                sheet.write_blank(row, 3, Some(&center_align_format))?;
+                sheet.write_blank(row, 4, Some(&center_align_format))?;
+                sheet.write_blank(row, 5, Some(&center_align_format))?;
+                sheet.write_blank(row, 6, Some(&left_align_format))?;
+                sheet.write_blank(row, 7, Some(&left_align_format))?;
+                sheet.write_blank(row, 8, Some(&left_align_format))?;
+                row += 1;
+                continue;
+            }
 
             for tertiary in secondary.children.iter() {
                 let operations_string = tertiary
@@ -156,11 +183,18 @@ fn setup_body(
                 sheet.write_string(row, 6, &operations_string, Some(&left_align_format))?;
                 sheet.write_string(row, 7, &confirmations_string, Some(&left_align_format))?;
                 sheet.write_string(row, 8, &remarks_string, Some(&left_align_format))?;
+
+                row += 1;
             }
 
-            let secondary_end_row_no = row;
+            let secondary_end_row_no = row - 1;
             if secondary_start_row_no == secondary_end_row_no {
-                sheet.write_string(row, 2, &secondary.title, Some(&center_align_format))?;
+                sheet.write_string(
+                    secondary_start_row_no,
+                    2,
+                    &secondary.title,
+                    Some(&center_align_format),
+                )?;
             } else {
                 sheet.merge_range(
                     secondary_start_row_no,
@@ -173,9 +207,14 @@ fn setup_body(
             }
         }
 
-        let primary_end_row_no = row;
+        let primary_end_row_no = row - 1;
         if primary_start_row_no == primary_end_row_no {
-            sheet.write_string(row, 1, &primary.title, Some(&center_align_format))?;
+            sheet.write_string(
+                primary_start_row_no,
+                1,
+                &primary.title,
+                Some(&center_align_format),
+            )?;
         } else {
             sheet.merge_range(
                 primary_start_row_no,
