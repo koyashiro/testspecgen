@@ -1,8 +1,8 @@
 use std::str::FromStr;
 
 use anyhow::{bail, ensure, Error};
-use structopt::StructOpt;
 use regex::Regex;
+use structopt::StructOpt;
 
 use crate::generator::{ColumnOption, ColumnsOption, GenerateOption};
 
