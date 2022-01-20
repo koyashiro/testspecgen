@@ -13,22 +13,45 @@ cargo install --git https://github.com/koyashiro/testspecgen
 ## Usage
 
 ```
-testspecgen [OPTIONS] <INPUT> <OUTPUT>
-```
+USAGE:
+    testspecgen [OPTIONS] <INPUT> <OUTPUT>
 
-```
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
 OPTIONS:
-        --confirmations-column <CONFIRMATIONS_COLUMN>       [env: CONFIRMATIONS_COLUMN=]  [default: Confirmations]
-        --font <FONT>                                       [env: FONT=]  [default: Yu Gothic]
-    -f, --format <FORMAT>                                   [env: FORMAT=]  [default: markdown]
-        --no-column <NO_COLUMN>                             [env: NO_COLUMN=]  [default: No.]
-        --operations-column <OPERATIONS_COLUMN>             [env: OPERATIONS_COLUMN=]  [default: Operations]
-        --operator-column <OPERATOR_COLUMN>                 [env: OPERATOR_COLUMN=]  [default: Operator]
-        --primary-item-column <PRIMARY_ITEM_COLUMN>         [env: PRIMARY_ITEM_COLUMN=]  [default: Primary Item]
-        --remarks-column <REMARKS_COLUMN>                   [env: REMARKS_COLUMN=]  [default: Remarks]
-        --result-column <RESULT_COLUMN>                     [env: RESULT_COLUMN=]  [default: Result]
-        --secondary-item-column <SECONDARY_ITEM_COLUMN>     [env: SECONDARY_ITEM_COLUMN=]  [default: Secondary Item]
-        --tertiary-item-column <TERTIARY_ITEM_COLUMN>       [env: TERTIARY_ITEM_COLUMN=]  [default: Tertiary Item]
+        --body-bg-color <BODY_BG_COLOR>                           [env: BODY_BG_COLOR=]  [default: 0xffffff]
+        --body-font-color <BODY_FONT_COLOR>                       [env: BODY_FONT_COLOR=]  [default: 0x000000]
+        --border-color <BORDER_COLOR>                             [env: BORDER_COLOR=]  [default: 0x5b9bd5]
+        --confirmations-header <CONFIRMATIONS_HEADER>             [env: CONFIRMATIONS_HEADER=]  [default: Confirmations]
+        --confirmations-item-width <CONFIRMATIONS_ITEM_WIDTH>     [env: CONFIRMATIONS_ITEM_WIDTH=]  [default: 60]
+        --font-family <FONT_FAMILY>                               [env: FONT_FAMILY=]  [default: Yu Gothic]
+    -f, --format <FORMAT>                                         [env: FORMAT=]  [default: markdown]
+        --header-bg-color <HEADER_BG_COLOR>                       [env: HEADER_BG_COLOR=]  [default: 0x5b9bd5]
+        --header-font-color <HEADER_FONT_COLOR>                   [env: HEADER_FONT_COLOR=]  [default: 0xffffff]
+        --no-header <NO_HEADER>                                   [env: NO_HEADER=]  [default: No.]
+        --no-width <NO_WIDTH>                                     [env: NO_WIDTH=]  [default: 8]
+        --operations-header <OPERATIONS_HEADER>                   [env: OPERATIONS_HEADER=]  [default: Operations]
+        --operations-item-width <OPERATIONS_ITEM_WIDTH>           [env: OPERATIONS_ITEM_WIDTH=]  [default: 60]
+        --operator-header <OPERATOR_HEADER>                       [env: OPERATOR_HEADER=]  [default: Operator]
+        --operator-width <OPERATOR_WIDTH>                         [env: OPERATOR_WIDTH=]  [default: 12]
+        --primary-item-header <PRIMARY_ITEM_HEADER>               [env: PRIMARY_ITEM_HEADER=]  [default: Primary Item]
+        --primary-item-width <PRIMARY_ITEM_WIDTH>                 [env: PRIMARY_ITEM_WIDTH=]  [default: 16]
+        --remarks-header <REMARKS_HEADER>                         [env: REMARKS_HEADER=]  [default: Remarks]
+        --remarks-item-width <REMARKS_ITEM_WIDTH>                 [env: REMARKS_ITEM_WIDTH=]  [default: 60]
+        --result-header <RESULT_HEADER>                           [env: RESULT_HEADER=]  [default: Result]
+        --result-width <RESULT_WIDTH>                             [env: RESULT_WIDTH=]  [default: 8]
+        --secondary-item-header <SECONDARY_ITEM_HEADER>
+             [env: SECONDARY_ITEM_HEADER=]  [default: Secondary Item]
+
+        --secondary-item-width <SECONDARY_ITEM_WIDTH>             [env: SECONDARY_ITEM_WIDTH=]  [default: 16]
+        --tertiary-item-header <TERTIARY_ITEM_HEADER>             [env: TERTIARY_ITEM_HEADER=]  [default: Tertiary Item]
+        --tertiary-item-width <TERTIARY_ITEM_WIDTH>               [env: TERTIARY_ITEM_WIDTH=]  [default: 16]
+
+ARGS:
+    <INPUT>
+    <OUTPUT>
 ```
 
 ## Example
