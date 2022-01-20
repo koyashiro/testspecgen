@@ -25,7 +25,7 @@ pub fn execute() -> anyhow::Result<()> {
     let spec: TestSpec = input.parse()?;
 
     let generate_option = opt.as_generate_option();
-    let generated: Vec<u8> = match opt.format {
+    let generated = match opt.format {
         Format::Markdown => generate_markdown(&spec)?.into_bytes(),
         Format::Excel => generate_excel(&spec, &generate_option)?,
     };
