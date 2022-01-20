@@ -29,15 +29,15 @@ pub fn generate_excel(spec: &TestSpec, option: &GenerateOption) -> anyhow::Resul
 }
 
 fn setup_columns(sheet: &mut Worksheet) -> Result<(), XlsxError> {
-    sheet.set_column(0, 0, 10f64, None)?;
-    sheet.set_column(1, 1, 30f64, None)?;
-    sheet.set_column(2, 2, 30f64, None)?;
-    sheet.set_column(3, 3, 30f64, None)?;
-    sheet.set_column(4, 4, 15f64, None)?;
-    sheet.set_column(5, 5, 10f64, None)?;
-    sheet.set_column(6, 6, 40f64, None)?;
-    sheet.set_column(7, 7, 40f64, None)?;
-    sheet.set_column(8, 8, 40f64, None)?;
+    sheet.set_column(0, 0, 8f64, None)?;
+    sheet.set_column(1, 1, 16f64, None)?;
+    sheet.set_column(2, 2, 16f64, None)?;
+    sheet.set_column(3, 3, 16f64, None)?;
+    sheet.set_column(4, 4, 12f64, None)?;
+    sheet.set_column(5, 5, 8f64, None)?;
+    sheet.set_column(6, 6, 60f64, None)?;
+    sheet.set_column(7, 7, 60f64, None)?;
+    sheet.set_column(8, 8, 60f64, None)?;
 
     Ok(())
 }
