@@ -38,7 +38,7 @@
                   "items": {
                     "type": "object",
                     "title": "Tertiary item",
-                    "requires": ["title"],
+                    "required": ["title"],
                     "properties": {
                       "title": {
                         "type": "string",
