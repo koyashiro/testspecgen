@@ -8,18 +8,18 @@ use structopt::StructOpt;
 use crate::generator::{generate_excel, generate_markdown};
 use crate::testspec::TestSpec;
 
-use self::opt::{Format, Opt};
+use self::opt::{Format, Input, Opt, Output};
 
 pub fn execute() -> anyhow::Result<()> {
     let opt = Opt::from_args();
 
-    let input = match opt.input.as_str() {
-        "-" => {
+    let input = match &opt.input {
+        Input::StdIn => {
             let mut buf = String::new();
             io::stdin().lock().read_to_string(&mut buf)?;
             buf
         }
-        _ => read_to_string(&opt.input)?,
+        Input::Path(s) => read_to_string(&s)?,
     };
 
     let spec: TestSpec = input.parse()?;
@@ -30,13 +30,13 @@ pub fn execute() -> anyhow::Result<()> {
         Format::Excel => generate_excel(&spec, &generate_option)?,
     };
 
-    match opt.output.as_str() {
-        "-" => {
+    match &opt.output {
+        Output::StdOut => {
             let mut out = io::stdout();
             out.write_all(generated.as_ref())?;
         }
-        _ => {
-            let mut f = File::create(&opt.output)?;
+        Output::Path(s) => {
+            let mut f = File::create(&s)?;
             f.write_all(generated.as_ref())?;
         }
     };

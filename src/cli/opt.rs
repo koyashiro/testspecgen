@@ -7,6 +7,38 @@ use structopt::StructOpt;
 use crate::generator::{ColumnOption, ColumnsOption, GenerateOption};
 
 #[derive(Debug)]
+pub enum Input {
+    StdIn,
+    Path(String),
+}
+
+impl<'a> FromStr for Input {
+    type Err = Error;
+    fn from_str(s: &str) -> Result<Input, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "-" => Ok(Input::StdIn),
+            _ => Ok(Input::Path(s.to_string())),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum Output {
+    StdOut,
+    Path(String),
+}
+
+impl FromStr for Output {
+    type Err = Error;
+    fn from_str(s: &str) -> Result<Output, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "-" => Ok(Output::StdOut),
+            _ => Ok(Output::Path(s.to_string())),
+        }
+    }
+}
+
+#[derive(Debug)]
 pub enum Format {
     Markdown,
     Excel,
@@ -51,10 +83,10 @@ impl FromStr for Color {
 #[derive(Debug, StructOpt)]
 pub struct Opt {
     #[structopt(name = "INPUT")]
-    pub input: String,
+    pub input: Input,
 
     #[structopt(name = "OUTPUT")]
-    pub output: String,
+    pub output: Output,
 
     #[structopt(
         name = "FORMAT",
