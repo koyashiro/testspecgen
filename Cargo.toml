@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.53"
-serde = { version = "1.0.135", features = ["derive"] }
+serde = { version = "1.0.136", features = ["derive"] }
 serde_yaml = "0.8.23"
 structopt = "0.3.26"
 mktemp = "0.4.1"
