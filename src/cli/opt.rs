@@ -1,8 +1,8 @@
 use std::str::FromStr;
 
 use anyhow::{bail, ensure, Error};
+use clap::Parser;
 use regex::Regex;
-use structopt::StructOpt;
 
 use crate::generator::{ColumnOption, ColumnsOption, GenerateOption};
 
@@ -80,30 +80,30 @@ impl FromStr for Color {
     }
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct Opt {
-    #[structopt(name = "INPUT")]
+    #[clap(name = "INPUT")]
     pub input: Input,
 
-    #[structopt(name = "OUTPUT")]
+    #[clap(name = "OUTPUT")]
     pub output: Output,
 
-    #[structopt(
+    #[clap(
         name = "FORMAT",
         long = "format",
-        short = "f",
+        short = 'f',
         default_value = "markdown",
         env
     )]
     pub format: Format,
 
-    #[structopt(name = "NO_HEADER", long = "no-header", default_value = "No.", env)]
+    #[clap(name = "NO_HEADER", long = "no-header", default_value = "No.", env)]
     pub no_header: String,
 
-    #[structopt(name = "NO_WIDTH", long = "no-width", default_value = "8", env)]
+    #[clap(name = "NO_WIDTH", long = "no-width", default_value = "8", env)]
     pub no_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "PRIMARY_ITEM_HEADER",
         long = "primary-item-header",
         default_value = "Primary Item",
@@ -111,7 +111,7 @@ pub struct Opt {
     )]
     pub primary_item_header: String,
 
-    #[structopt(
+    #[clap(
         name = "PRIMARY_ITEM_WIDTH",
         long = "primary-item-width",
         default_value = "16",
@@ -119,7 +119,7 @@ pub struct Opt {
     )]
     pub primary_item_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "SECONDARY_ITEM_HEADER",
         long = "secondary-item-header",
         default_value = "Secondary Item",
@@ -127,7 +127,7 @@ pub struct Opt {
     )]
     pub secondary_item_header: String,
 
-    #[structopt(
+    #[clap(
         name = "SECONDARY_ITEM_WIDTH",
         long = "secondary-item-width",
         default_value = "16",
@@ -135,7 +135,7 @@ pub struct Opt {
     )]
     pub secondary_item_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "TERTIARY_ITEM_HEADER",
         long = "tertiary-item-header",
         default_value = "Tertiary Item",
@@ -143,7 +143,7 @@ pub struct Opt {
     )]
     pub tertiary_item_header: String,
 
-    #[structopt(
+    #[clap(
         name = "TERTIARY_ITEM_WIDTH",
         long = "tertiary-item-width",
         default_value = "16",
@@ -151,7 +151,7 @@ pub struct Opt {
     )]
     pub tertiary_item_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "OPERATOR_HEADER",
         long = "operator-header",
         default_value = "Operator",
@@ -159,7 +159,7 @@ pub struct Opt {
     )]
     pub operator_header: String,
 
-    #[structopt(
+    #[clap(
         name = "OPERATOR_WIDTH",
         long = "operator-width",
         default_value = "12",
@@ -167,7 +167,7 @@ pub struct Opt {
     )]
     pub operator_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "RESULT_HEADER",
         long = "result-header",
         default_value = "Result",
@@ -175,10 +175,10 @@ pub struct Opt {
     )]
     pub result_header: String,
 
-    #[structopt(name = "RESULT_WIDTH", long = "result-width", default_value = "8", env)]
+    #[clap(name = "RESULT_WIDTH", long = "result-width", default_value = "8", env)]
     pub result_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "OPERATIONS_HEADER",
         long = "operations-header",
         default_value = "Operations",
@@ -186,7 +186,7 @@ pub struct Opt {
     )]
     pub operations_header: String,
 
-    #[structopt(
+    #[clap(
         name = "OPERATIONS_ITEM_WIDTH",
         long = "operations-item-width",
         default_value = "60",
@@ -194,7 +194,7 @@ pub struct Opt {
     )]
     pub operations_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "CONFIRMATIONS_HEADER",
         long = "confirmations-header",
         default_value = "Confirmations",
@@ -202,7 +202,7 @@ pub struct Opt {
     )]
     pub confirmations_header: String,
 
-    #[structopt(
+    #[clap(
         name = "CONFIRMATIONS_ITEM_WIDTH",
         long = "confirmations-item-width",
         default_value = "60",
@@ -210,7 +210,7 @@ pub struct Opt {
     )]
     pub confirmations_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "REMARKS_HEADER",
         long = "remarks-header",
         default_value = "Remarks",
@@ -218,7 +218,7 @@ pub struct Opt {
     )]
     pub remarks_header: String,
 
-    #[structopt(
+    #[clap(
         name = "REMARKS_ITEM_WIDTH",
         long = "remarks-item-width",
         default_value = "60",
@@ -226,7 +226,7 @@ pub struct Opt {
     )]
     pub remarks_width: f64,
 
-    #[structopt(
+    #[clap(
         name = "FONT_FAMILY",
         long = "font-family",
         default_value = "Yu Gothic",
@@ -234,7 +234,7 @@ pub struct Opt {
     )]
     pub font_family: String,
 
-    #[structopt(
+    #[clap(
         name = "HEADER_FONT_COLOR",
         long = "header-font-color",
         default_value = "0xffffff",
@@ -242,7 +242,7 @@ pub struct Opt {
     )]
     pub header_font_color: Color,
 
-    #[structopt(
+    #[clap(
         name = "HEADER_BG_COLOR",
         long = "header-bg-color",
         default_value = "0x5b9bd5",
@@ -250,7 +250,7 @@ pub struct Opt {
     )]
     pub header_bg_color: Color,
 
-    #[structopt(
+    #[clap(
         name = "BODY_FONT_COLOR",
         long = "body-font-color",
         default_value = "0x000000",
@@ -258,7 +258,7 @@ pub struct Opt {
     )]
     pub body_font_color: Color,
 
-    #[structopt(
+    #[clap(
         name = "BODY_BG_COLOR",
         long = "body-bg-color",
         default_value = "0xffffff",
@@ -266,7 +266,7 @@ pub struct Opt {
     )]
     pub body_bg_color: Color,
 
-    #[structopt(
+    #[clap(
         name = "BORDER_COLOR",
         long = "border-color",
         default_value = "0x5b9bd5",
