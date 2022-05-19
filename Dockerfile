@@ -1,4 +1,4 @@
-FROM rust:1.60.0 AS build
+FROM rust:1.61.0 AS build
 WORKDIR /work
 RUN apt-get update && apt-get install --no-install-recommends -y clang
 COPY Cargo.toml /work/Cargo.toml
